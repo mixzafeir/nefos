@@ -1,0 +1,95 @@
+version: '3.5'
+
+volumes:
+  mysql-db: ~
+
+services:
+
+  keyrock:
+    image: fiware/idm:7.6.0
+    container_name: fiware-keyrock
+    hostname: keyrock
+    # depends_on:
+    #     - mysql-db
+    ports:
+        - '3000:3000'
+        - '443:443'
+    environment:
+      - DEBUG=idm:*
+      - IDM_DB_HOST=mysql-db
+      - IDM_HOST=http://localhost:3000
+      - IDM_PORT=3000
+      # Development use only
+      # Use Docker Secrets for Sensitive Data
+      - IDM_DB_PASS=secret
+      - IDM_DB_USER=root
+      - IDM_ADMIN_USER=death
+      - IDM_ADMIN_EMAIL=mixzafeir@gmail.com
+      - IDM_ADMIN_PASS=12345678
+      # If sending eMails point to any STMP server
+      - IDM_EMAIL_HOST=mailer
+      - IDM_EMAIL_PORT=25
+    networks:
+        testing_net:
+            ipv4_address: 172.28.1.5
+  mysql-db:
+    restart: always
+    image: mysql:5.7
+    hostname: mysql-db
+    container_name: db-mysql
+    expose:
+    - '3307'
+    ports:
+    - '3307:3307'
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.6
+    environment:
+      # Development use only
+      # Use Docker Secrets for Sensitive Data
+      - 'MYSQL_ROOT_PASSWORD=secret'
+      - 'MYSQL_ROOT_HOST=172.28.1.5'
+    volumes:
+      - mysql-db:/var/lib/mysql
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    networks:
+          testing_net:
+              ipv4_address: 172.28.1.4
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile1
+    ports:
+    - "7000:80"
+    volumes:
+    - .:/var/www
+    networks:
+            testing_net:
+                ipv4_address: 172.28.1.3
+                
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - "5000:80"
+    volumes:
+    - .:/var/www
+    networks:
+            testing_net:
+                ipv4_address: 172.28.1.2
+
+
+networks:
+    testing_net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.28.1.0/16

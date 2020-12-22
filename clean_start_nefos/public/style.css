@@ -1,0 +1,33 @@
+.forms {
+    display: ruby-base-container;
+    height: 100%;
+    width: 100%;
+}
+
+
+
+.logout-button-container {
+    margin-top: 10px;
+    width: 100%;
+    text-align: right;
+    font-size: 25px;
+}
+
+.geia {
+    font-size: 20px;
+}
+
+.card-body{
+    background-color: rgba(54, 51, 85, 0.356);
+}
+
+body {
+    padding-top: 56px;
+    background-color: #525151;
+}
+
+#alert-box {
+    position: absolute;
+}
+
+
