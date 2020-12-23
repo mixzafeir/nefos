@@ -11,18 +11,26 @@ function cascadeDelete($username,$conn){
     if(count($arr)>0){
         $cinemaname=$arr[0]->cinema;
         $command = new MongoDB\Driver\BulkWrite();
-
         $command->delete(
             ['cinema' => $cinemaname],
             ['limit' => 0]
         );
         $result = $conn->executeBulkWrite("mixalisdb.cinemas", $command);
+
+
         $command = new MongoDB\Driver\BulkWrite();
         $command->delete(
             ['cinema' => $cinemaname],
             ['limit' => 0]
         );
         $result = $conn->executeBulkWrite("mixalisdb.movies", $command);
+
+        $command = new MongoDB\Driver\BulkWrite();
+        $command->delete(
+            ['cinema' => $cinemaname],
+            ['limit' => 0]
+        );
+        $result = $conn->executeBulkWrite("mixalisdb.favorites", $command);
     }
     $filter=[
         "user"=>$username
