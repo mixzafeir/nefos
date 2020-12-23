@@ -60,7 +60,7 @@
             <h2 class="my-4">Your favorites</h2>
             <div id="favorites-list">
                 <div class="list-group">
-                    <span class="fav-list-elem">kwlos</span>
+                    <span class="fav-list-elem"></span>
                 </div>
             </div>
             <div class="search-container">

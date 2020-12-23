@@ -70,11 +70,13 @@
 </nav>
 
 <div class="container">
+    <div id="alert" class="col-3">
+        <div class="message"></div>
+    </div>
     <div class="row">
-        <div class="col-3">
-        </div>
-        <div class="col-9 card-columns">
-        </div>
+        <div class="col-3"></div>
+        <div class="col-9 card-columns"></div>
+
     </div>
 </div>
 
@@ -128,6 +130,7 @@
 
     function createMovie() {
         checkLogged();
+        isValid=true;
         var o = {
             dbcollection: "movies",
             title: document.getElementById("movieCreationTitle").value,
@@ -136,40 +139,60 @@
             category: document.getElementById("movieCreationCategory").value,
             cinema: sessionStorage.getItem("ownedCinema")
         }
-        $.ajax({
-            type: "POST",
-            url: domain+":7000/rest_resource_create.php",
-            data: JSON.stringify(o)
-        }).done(function () {
-            console.log('created movie with title ' + o.title)
-            $(".card-columns").find(".booking-card").remove()
-            refreshCards()
-            refreshDatePicker()
-        })
+        if(o.title=="" || o.startdate=="" || o.enddate=="" || o.category=="" || o.cinema==""){
+            alertError("Fields cannot be empty")
+            isValid=false;
+        }
+        if (isValid==true){
+            $.ajax({
+                type: "POST",
+                url: domain+":7000/rest_resource_create.php",
+                data: JSON.stringify(o)
+            }).done(function () {
+                console.log('created movie with title ' + o.title)
+                $(".card-columns").find(".booking-card").remove()
+                refreshCards()
+                refreshDatePicker()
+            })
+        }
     }
+
+    function alertError(msg){
+        $("#alert").fadeIn();
+        $("#alert").addClass("alert alert-danger")
+        $("#alert").find('.message').text(msg);
+        $("#alert").delay(3000).fadeOut("slow");
+    } 
 
     function createCinema() {
         checkLogged();
+        isValid=true;
         var cinemaName = document.getElementById("cinemaCreationName").value;
         var o = {
             dbcollection: "cinemas",
             cinema: cinemaName,
             owner: sessionStorage.getItem("username"),
         }
-        $.ajax({
-            type: "POST",
-            url: domain+":7000/rest_resource_create.php",
-            data: JSON.stringify(o)
-        }).done(function (response) {
-            sessionStorage.setItem("ownedCinema", cinemaName)
-            console.log('created ciname with name ' + cinemaName)
-            $(".card-columns").find(".booking-card").remove()
-            $("#create-cinema-form").remove()
-            refreshAddMovieDiv()
-            refreshCards()
+        if(o.cinema==""){
+            alertError("Field Cannot be Empty")
+            isValid=false;
+        }
+        if (isValid==true){
+            $.ajax({
+                type: "POST",
+                url: domain+":7000/rest_resource_create.php",
+                data: JSON.stringify(o)
+            }).done(function (response) {
+                sessionStorage.setItem("ownedCinema", cinemaName)
+                console.log('created ciname with name ' + cinemaName)
+                $(".card-columns").find(".booking-card").remove()
+                $("#create-cinema-form").remove()
+                refreshAddMovieDiv()
+                refreshCards()
 
-            refreshDatePicker()
-        })
+                refreshDatePicker()
+            })
+        }
     }
 
     function refreshAddMovieDiv() {
