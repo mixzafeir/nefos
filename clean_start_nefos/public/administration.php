@@ -43,10 +43,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="welcome.php">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="welcome.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="movies.php">Movies</a>
@@ -55,7 +53,9 @@
                     <a class="nav-link" onclick="cinemaButton()">CinemaOwner</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" onclick="adminButton()">Administration</a>
+                    <a class="nav-link active" onclick="adminButton()">Administration
+                        <span class="sr-only">(current)</span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <span id="nasur" class="nav-link active"></span>
@@ -246,8 +246,8 @@
                             <option value="${obj.confirmed}">${show1}</option>
                             <option value="${temp}">${show2}</option>
                         </select> 
-                        <input class="btn btn-primary btn-danger" name="delete" onclick="deleteUser('${obj.id}','${obj.username}')" value="delete">
-                        <input class="btn btn-primary" name="update" onclick="updateCard('${obj.id}','${obj.password}')" value="update">
+                        <input class="btn btn-primary btn-danger" name="delete" onclick="deleteUser('${obj.id}','${obj.username}')" type="button" value="delete">
+                        <input class="btn btn-primary" name="update" onclick="updateCard('${obj.id}','${obj.password}')" type="button" value="update">
                     </form>
                 </div>
             </div>`)

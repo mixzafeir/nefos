@@ -23,9 +23,45 @@ function cascadeDelete($username,$conn){
             ['limit' => 0]
         );
         $result = $conn->executeBulkWrite("mixalisdb.movies", $command);
+    }
+    $filter=[
+        "user"=>$username
+    ];
+    $read   = new MongoDB\Driver\Query($filter, $option);
+    $records = $conn->executeQuery("mixalisdb.favorites", $read);
+    $arr     = iterator_to_array($records);
+    if(count($arr)>0){
+        $command = new MongoDB\Driver\BulkWrite();
+        $command->delete(
+            ['user' => $username],
+            ['limit' => 0]
+        );
+        $result = $conn->executeBulkWrite("mixalisdb.favorites", $command);
 
     }
 }
+
+function cascadeMov($title,$cinema,$conn){
+    $filter=[
+        "title"=>$title,
+        "cinema"=>$cinema
+    ];
+    $read   = new MongoDB\Driver\Query($filter, $option);
+    $records = $conn->executeQuery("mixalisdb.favorites", $read);
+    $arr     = iterator_to_array($records);
+    if(count($arr)>0){
+        $command = new MongoDB\Driver\BulkWrite();
+        $command->delete(
+            [
+            'cinema' => $cinema,
+            'title' => $title
+            ],
+            ['limit' => 0]
+        );
+        $result = $conn->executeBulkWrite("mixalisdb.favorites", $command);
+    }
+}
+
 
 
 // required headers
@@ -57,10 +93,11 @@ if ($collection == "favorites") {
         [
             'title' => $data->title,
             'user'  => $data->user,
+            'cinema' => $data->cinema
         ],
         ['limit' => 0]
     );
-}else {
+}else{
     $command->delete(
         ['_id' => new \MongoDB\BSON\ObjectId($data->id)],
         ['limit' => 0]
@@ -70,6 +107,9 @@ try {
     $result = $conn->executeBulkWrite("$dbname.$collection", $command);
     if($collection=="users"){
         cascadeDelete($data->username,$conn);
+    }
+    if($collection=="movies"){
+        cascadeMov($data->title,$data->cinema,$conn);
     }
 }catch (\Exception $e) {
     printf("Other error: %s\n", $e->getMessage());

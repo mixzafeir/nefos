@@ -42,16 +42,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="welcome.php">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="welcome.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="movies.php">Movies</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="navBarCinemaButton()">CinemaOwner</a>
+                <li class="nav-item active">
+                    <a class="nav-link" onclick="navBarCinemaButton()">CinemaOwner
+                        <span class="sr-only">(current)</span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" onclick="navBarAdminButton()">Administration</a>
@@ -205,11 +205,13 @@
         $(".datepicker").datepicker({dateFormat: "yy-mm-dd"});
     }
 
-    function deleteMovie(id) {
+    function deleteMovie(id,title,cinema) {
         checkLogged();
         var o = {
             dbcollection: "movies",
             id: id,
+            title: title,
+            cinema: cinema
         }
         $.ajax({
             type: "DELETE",
@@ -321,7 +323,7 @@
                     <label for="cinemaname">Cinema</label>
                     <input type="text" class="form-control" name="cinemaname" value="${obj.cinema}" readonly="">
                 </div>
-                <input class="btn btn-primary btn-danger btn-sm" name="delete" onclick="deleteMovie('${obj.id}')" type="button" value="delete">
+                <input class="btn btn-primary btn-danger btn-sm" name="delete" onclick="deleteMovie('${obj.id}','${obj.title}','${obj.cinema}')" type="button" value="delete">
                 <input class="btn btn-primary btn-sm" name="update" onclick="updatecard('${obj.id}')" type="button" value="update">
             </form>
         </div>

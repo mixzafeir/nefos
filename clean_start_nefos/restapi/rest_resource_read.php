@@ -29,13 +29,13 @@ $filter = [];
 if (endsWith($uri_parts[0], "movies")) {
     $collection = "movies";
     if ($_GET["title"] != "") {
-        $filter["title"] = ['$regex' => $_GET["title"]];
+        $filter["title"] = ['$regex' => "(?i)".$_GET["title"]];
     }
     if ($_GET["cinema"] != "") {
-        $filter["cinema"] = ['$regex' => $_GET["cinema"]];
+        $filter["cinema"] = ['$regex' =>"(?i)". $_GET["cinema"]];
     }
     if ($_GET["category"] != "") {
-        $filter["category"] = ['$regex' => $_GET["category"]];
+        $filter["category"] = ['$regex' => "(?i)".$_GET["category"]];
     }
     if ($_GET["date"] != "") {
         $filter['startdate'] = ['$lte' => $_GET["date"]];
@@ -54,7 +54,7 @@ if (endsWith($uri_parts[0], "movies")) {
         $filter["user"] = $_GET["user"];
     }
 } else {
-    echo "unknown collection.available collections: movies cinemas users";
+    echo "unknown collection.available collections: movies cinemas users favorites";
     exit (400);
 }
 

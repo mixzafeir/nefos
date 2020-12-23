@@ -27,13 +27,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="welcome.php">Home</a>
+                </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="welcome.php">Home
+                    <a class="nav-link" href="movies.php">Movies
                         <span class="sr-only">(current)</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="movies.php">Movies</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" onclick="cinemaButton()">CinemaOwner</a>
@@ -253,6 +253,7 @@
         var o = {
             dbcollection: "favorites",
             title: $(`.obj${id} input[name='title']`)[0].value,
+            cinema: $(`.obj${id} input[name='cinemaname']`)[0].value,
             user: sessionStorage.getItem("username")
         }
         $.post(domain+":7000/rest_resource_create.php", JSON.stringify(o), function () {
